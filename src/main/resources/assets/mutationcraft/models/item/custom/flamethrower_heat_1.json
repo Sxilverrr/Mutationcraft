@@ -1,0 +1,6 @@
+{
+  "parent": "mutationcraft:item/custom/flamethrower",
+  "textures": {
+    "1": "mutationcraft:item/flamethrower_heat_1"
+  }
+}

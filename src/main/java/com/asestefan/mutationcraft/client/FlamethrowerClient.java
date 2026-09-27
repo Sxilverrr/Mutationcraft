@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 public final class FlamethrowerClient {
     private static final int OVERHEAT_COLOR = 0xFF2020;
+    private static final int COOLDOWN_TICKS = 20;
     private static final Map<Entity, FlamethrowerLoopSound> LOOPS = new WeakHashMap<>();
 
     public static void playLoop(Entity source, BooleanSupplier active) {
@@ -33,6 +34,14 @@ public final class FlamethrowerClient {
                 () -> active.getAsBoolean() && (source instanceof LivingEntity living && FlameSpray.submerged(living)) == water);
         LOOPS.put(source, sound);
         Minecraft.getInstance().getSoundManager().play(sound);
+    }
+
+    public static float heatLevel(ItemStack stack) {
+        float heat = FlamethrowerItem.heat(stack);
+        if (FlamethrowerItem.overheated(stack)) {
+            return heat > COOLDOWN_TICKS ? 1.0F : 0.99F * heat / COOLDOWN_TICKS;
+        }
+        return Math.min(0.99F, heat / FlamethrowerItem.maxHeat());
     }
 
     public static HumanoidModel.ArmPose armPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {

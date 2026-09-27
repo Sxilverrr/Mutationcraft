@@ -1,3 +1,9 @@
 {
-  "parent": "mutationcraft:item/custom/flamethrower"
+  "parent": "mutationcraft:item/custom/flamethrower",
+  "overrides": [
+    { "predicate": { "mutationcraft:heat": 0.25 }, "model": "mutationcraft:item/custom/flamethrower_heat_1" },
+    { "predicate": { "mutationcraft:heat": 0.5 }, "model": "mutationcraft:item/custom/flamethrower_heat_2" },
+    { "predicate": { "mutationcraft:heat": 0.75 }, "model": "mutationcraft:item/custom/flamethrower_heat_3" },
+    { "predicate": { "mutationcraft:heat": 1.0 }, "model": "mutationcraft:item/custom/flamethrower_overheat" }
+  ]
 }

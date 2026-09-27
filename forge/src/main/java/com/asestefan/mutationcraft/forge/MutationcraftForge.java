@@ -2,6 +2,9 @@ package com.asestefan.mutationcraft.forge;
 
 import com.asestefan.mutationcraft.MutationcraftMod;
 import com.asestefan.mutationcraft.client.FlamethrowerClient;
+import net.minecraft.client.renderer.item.ItemProperties;
+import com.asestefan.mutationcraft.init.ModItems;
+import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.client.FlamethrowerFlameParticle;
 import com.asestefan.mutationcraft.client.FlamethrowerScreen;
 import com.asestefan.mutationcraft.client.ModEntityRenderers;
@@ -111,7 +114,10 @@ public class MutationcraftForge {
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenus.FLAMETHROWER.get(), FlamethrowerScreen::new));
+        event.enqueueWork(() -> {
+            MenuScreens.register(ModMenus.FLAMETHROWER.get(), FlamethrowerScreen::new);
+            ItemProperties.register(ModItems.FLAMETHROWER.get(), ModUtil.id("mutationcraft:heat"), (stack, level, entity, seed) -> FlamethrowerClient.heatLevel(stack));
+        });
     }
 
     private void onRegister(RegisterEvent event) {

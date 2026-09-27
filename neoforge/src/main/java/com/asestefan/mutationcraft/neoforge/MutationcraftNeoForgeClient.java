@@ -18,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -39,6 +41,11 @@ public class MutationcraftNeoForgeClient {
         modBus.addListener(this::onClientExtensions);
         modBus.addListener(this::onRegisterGuiLayers);
         modBus.addListener(this::onRegisterParticles);
+        modBus.addListener(this::onClientSetup);
+    }
+
+    private void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> ItemProperties.register(ModItems.FLAMETHROWER.get(), ModUtil.id("mutationcraft:heat"), (stack, level, entity, seed) -> FlamethrowerClient.heatLevel(stack)));
     }
 
     private void onRegisterScreens(RegisterMenuScreensEvent event) {
