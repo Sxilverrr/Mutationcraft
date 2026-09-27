@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -42,11 +41,6 @@ public class ParasiticShooterEntity extends MutantEntity implements RangedAttack
         this.xpReward = 12;
         this.moveControl = new FlyingMoveControl(this, 10, true);
         this.setNoGravity(true);
-    }
-
-    @Override
-    protected String defaultTexture() {
-        return "parasitic_shooter";
     }
 
     @Override
@@ -109,11 +103,6 @@ public class ParasiticShooterEntity extends MutantEntity implements RangedAttack
 
     @Override
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
     }
 
     @Override

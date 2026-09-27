@@ -30,18 +30,11 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 //?}
 
 public class BloodSpikeEntity extends MutantEntity {
-    private static final int LIFETIME = 300;
     private static final String AGE_KEY = "SpikeAge";
-    private static final String TOUCH_KEY = "mutationcraft:blood_spike_touch";
     private int age;
 
     public BloodSpikeEntity(EntityType<? extends BloodSpikeEntity> type, Level level) {
         super(type, level);
-    }
-
-    @Override
-    protected String defaultTexture() {
-        return "blood_spike";
     }
 
     @Override
@@ -70,7 +63,7 @@ public class BloodSpikeEntity extends MutantEntity {
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
         if (direct instanceof AbstractArrow || direct instanceof Player || direct instanceof ThrownPotion || direct instanceof AreaEffectCloud
-                || source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.LIGHTNING_BOLT)
+                || source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.LIGHTNING_BOLT)
                 || source.is(DamageTypeTags.IS_EXPLOSION) || source.is(DamageTypes.TRIDENT) || source.is(DamageTypes.FALLING_ANVIL)
                 || source.is(DamageTypes.DRAGON_BREATH) || source.is(DamageTypes.WITHER) || source.is(DamageTypes.WITHER_SKULL)) {
             return false;
@@ -81,20 +74,34 @@ public class BloodSpikeEntity extends MutantEntity {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.level() instanceof ServerLevel level && ++this.age >= LIFETIME && this.isAlive()) {
+        if (!(this.level() instanceof ServerLevel level)) {
+            return;
+        }
+        this.ambientParticles(level);
+        if (++this.age >= this.lifetime() && this.isAlive()) {
             level.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 1.0, 3.0, 1.0, 1.0);
             this.discard();
         }
     }
 
+    protected int lifetime() {
+        return 300;
+    }
+
+    protected void ambientParticles(ServerLevel level) {
+    }
+
+    protected void touch(Player player) {
+        player.addEffect(new MobEffectInstance(ModMobEffects.BLEEDING.ref(), 100, 0));
+        this.level().explode(null, this.getX(), this.getY(), this.getZ(), 1.0F, Level.ExplosionInteraction.NONE);
+    }
+
     @Override
     public void playerTouch(Player player) {
         super.playerTouch(player);
-        if (this.level().isClientSide() || !this.isAlive() || !ModUtil.tryCooldown(player, TOUCH_KEY, 20)) {
-            return;
+        if (!this.level().isClientSide() && this.isAlive() && ModUtil.tryCooldown(player, "mutationcraft:" + this.getTexture() + "_touch", 20)) {
+            this.touch(player);
         }
-        player.addEffect(new MobEffectInstance(ModMobEffects.BLEEDING.ref(), 100, 0));
-        this.level().explode(null, this.getX(), this.getY(), this.getZ(), 1.0F, Level.ExplosionInteraction.NONE);
     }
 
     @Override

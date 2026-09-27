@@ -1,7 +1,7 @@
 package com.asestefan.mutationcraft.forge;
 
 import com.asestefan.mutationcraft.client.FlamethrowerClient;
-import com.asestefan.mutationcraft.effect.MutagenSicknessMobEffect;
+import com.asestefan.mutationcraft.effect.ModMobEffect;
 import com.asestefan.mutationcraft.item.FlamethrowerItem;
 import com.asestefan.mutationcraft.platform.IPlatformHelper;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -56,7 +57,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public MobEffect createMutagenSicknessEffect() {
-        return new MutagenSicknessMobEffect() {
+        return new ModMobEffect(MobEffectCategory.HARMFUL, -16777216) {
             @Override
             public List<ItemStack> getCurativeItems() {
                 return new ArrayList<>();

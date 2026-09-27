@@ -4,7 +4,6 @@ import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.behavior.CorrosionQueenAttack;
 import com.asestefan.mutationcraft.behavior.CorrosionQueenSpells;
 import com.asestefan.mutationcraft.behavior.ParasiticRamCharge;
-import com.asestefan.mutationcraft.behavior.ParasiticShooterSpots;
 import com.asestefan.mutationcraft.behavior.TheIntoxicatorBehavior;
 import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.CorrosionQueenEntity;
@@ -93,7 +92,7 @@ public class BossEvents implements EventHandler {
         if (entity instanceof ParasiticRamEntity ram) {
             ParasiticRamCharge.onTarget(ram);
         } else if (entity instanceof ParasiticShooterEntity shooter) {
-            ParasiticShooterSpots.onTarget(shooter);
+            parasiticShooterSpots(shooter);
         }
     }
 
@@ -125,5 +124,18 @@ public class BossEvents implements EventHandler {
         if (killer instanceof LivingEntity living && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             living.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), 2000, 0));
         }
+    }
+
+    private static void parasiticShooterSpots(ParasiticShooterEntity shooter) {
+        if (!(shooter.level() instanceof ServerLevel level) || level.getRandom().nextDouble() > 0.03) {
+            return;
+        }
+        Mob miter = ModEntities.MITER.get().create(level);
+        if (miter == null) {
+            return;
+        }
+        miter.moveTo(shooter.getX(), shooter.getY(), shooter.getZ(), level.getRandom().nextFloat() * 360.0F, 0.0F);
+        ModUtil.finalizeSpawn(miter, level, level.getCurrentDifficultyAt(miter.blockPosition()), MobSpawnType.MOB_SUMMONED);
+        level.addFreshEntity(miter);
     }
 }

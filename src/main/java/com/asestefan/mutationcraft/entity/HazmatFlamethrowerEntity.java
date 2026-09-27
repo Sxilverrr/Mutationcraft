@@ -1,6 +1,9 @@
 package com.asestefan.mutationcraft.entity;
 
-import com.asestefan.mutationcraft.behavior.HazmatFlamethrowerDeath;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
+import com.asestefan.mutationcraft.init.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import com.asestefan.mutationcraft.behavior.HazmatFlamethrowerSpray;
 import com.asestefan.mutationcraft.behavior.HazmatTargets;
 import com.asestefan.mutationcraft.client.FlamethrowerClient;
@@ -54,7 +57,7 @@ public class HazmatFlamethrowerEntity extends HazmatMob {
     public void die(DamageSource source) {
         super.die(source);
         if (this.level() instanceof ServerLevel level) {
-            HazmatFlamethrowerDeath.explode(level, this.getX(), this.getY(), this.getZ());
+            hazmatFlamethrowerDeath(level, this.getX(), this.getY(), this.getZ());
         }
     }
 
@@ -148,5 +151,12 @@ public class HazmatFlamethrowerEntity extends HazmatMob {
                 .add(Attributes.FOLLOW_RANGE, 32.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.3);
+    }
+
+    private static void hazmatFlamethrowerDeath(ServerLevel level, double x, double y, double z) {
+        if (level.getRandom().nextDouble() < MutationcraftConfig.HAZMAT_FLAMETHROWER_EXPLODE_CHANCE.get()) {
+            level.explode(null, x, y, z, 2.0F, Level.ExplosionInteraction.MOB);
+            level.playSound(null, BlockPos.containing(x, y, z), ModSounds.HAZMAT_FLAMETHROWER_EXPLODE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
     }
 }

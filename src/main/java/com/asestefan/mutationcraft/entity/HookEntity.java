@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -80,18 +79,8 @@ public abstract class HookEntity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_DEATH.get();
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
     }
 
     @Override

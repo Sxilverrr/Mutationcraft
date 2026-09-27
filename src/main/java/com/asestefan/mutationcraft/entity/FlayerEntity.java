@@ -9,17 +9,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -48,11 +43,6 @@ public class FlayerEntity extends MutantEntity {
         this.xpReward = 5;
     }
 
-    @Override
-    protected String defaultTexture() {
-        return "flayer";
-    }
-
     //? if >=1.21 {
     /*@Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -76,10 +66,7 @@ public class FlayerEntity extends MutantEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.targetSelector.addGoal(6, target(this, Player.class));
         this.targetSelector.addGoal(7, target(this, HazmatLeaderEntity.class));
         this.targetSelector.addGoal(8, target(this, HazmatGuardEntity.class));
@@ -150,9 +137,6 @@ public class FlayerEntity extends MutantEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN)) {
-            return false;
-        }
         if (this.isHidden() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return false;
         }

@@ -1,7 +1,12 @@
 package com.asestefan.mutationcraft.event;
 
+import com.asestefan.mutationcraft.behavior.MutantConversion;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
+import com.asestefan.mutationcraft.init.ModEntities;
+import com.asestefan.mutationcraft.init.ModSounds;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.monster.Skeleton;
 import com.asestefan.mutationcraft.ModUtil;
-import com.asestefan.mutationcraft.behavior.AssimilatedHumanEvolution;
 import com.asestefan.mutationcraft.behavior.AssimilatedRoamerAttack;
 import com.asestefan.mutationcraft.behavior.AssimilatedVillagerCure;
 import com.asestefan.mutationcraft.entity.AssimilatedHumanEntity;
@@ -56,7 +61,7 @@ public final class HumanoidEvents implements EventHandler {
 
     @Override
     public void onLivingDeath(LivingEntity entity, DamageSource source) {
-        AssimilatedHumanEvolution.onDeath(entity, source);
+        assimilatedHumanEvolution(entity, source);
     }
 
     @Override
@@ -68,5 +73,21 @@ public final class HumanoidEvents implements EventHandler {
         return entity instanceof AssimilatedVillagerEntity || entity instanceof AssimilatedPillagerEntity || entity instanceof AssimilatedPiglinEntity
                 || entity instanceof AssimilatedHumanEntity || entity instanceof AssimilatedRoamerEntity || entity instanceof DevelopedRoamerEntity
                 || entity instanceof HumanStage1Entity || entity instanceof HumanStage2Entity || entity instanceof HumanStage3Entity;
+    }
+
+    private static final String KEY = "mutationcraft:skeleton_kills";
+
+    private static void assimilatedHumanEvolution(LivingEntity victim, DamageSource source) {
+        if (!(victim instanceof Skeleton) || !(source.getEntity() instanceof AssimilatedHumanEntity human) || !human.isAlive()) {
+            return;
+        }
+        CompoundTag data = ModUtil.data(human);
+        int kills = data.getInt(KEY) + 1;
+        if (kills < MutationcraftConfig.HUMAN_EVOLVE_KILLS.getInt()) {
+            data.putInt(KEY, kills);
+            return;
+        }
+        data.remove(KEY);
+        MutantConversion.evolve(human, ModEntities.FLAYER.get(), ModSounds.MUTANT_TRANSFORM.get());
     }
 }

@@ -1,6 +1,9 @@
 package com.asestefan.mutationcraft.entity;
 
-import com.asestefan.mutationcraft.behavior.NecroptorBombBurst;
+import com.asestefan.mutationcraft.behavior.AberrationSpawns;
+import com.asestefan.mutationcraft.behavior.MutantConversion;
+import com.asestefan.mutationcraft.init.ModSounds;
+import net.minecraft.util.RandomSource;
 import com.asestefan.mutationcraft.init.ModEntities;
 import com.asestefan.mutationcraft.init.ModItems;
 import net.minecraft.server.level.ServerLevel;
@@ -60,7 +63,7 @@ public class NecroptorBombEntity extends ThrowableItemProjectile {
             Vec3 center = result instanceof BlockHitResult block
                     ? Vec3.atBottomCenterOf(block.getBlockPos().relative(block.getDirection()))
                     : this.position();
-            NecroptorBombBurst.burst(level, center);
+            necroptorBombBurst(level, center);
             this.discard();
         }
     }
@@ -73,5 +76,28 @@ public class NecroptorBombEntity extends ThrowableItemProjectile {
         bomb.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, velocity, 1.0F);
         level.addFreshEntity(bomb);
         return bomb;
+    }
+
+    private static final double SPREAD = 1.5;
+
+    private static void necroptorBombBurst(ServerLevel level, Vec3 center) {
+        RandomSource random = level.getRandom();
+        int count = 2;
+        if (random.nextDouble() < 0.25) {
+            count++;
+        }
+        if (random.nextDouble() < 0.75) {
+            count++;
+        }
+        for (int i = 0; i < count; i++) {
+            double x = center.x;
+            double z = center.z;
+            if (i > 0) {
+                x += (random.nextDouble() * 2.0 - 1.0) * SPREAD;
+                z += (random.nextDouble() * 2.0 - 1.0) * SPREAD;
+            }
+            AberrationSpawns.spawnNear(level, ModEntities.NECROPTOR.get(), x, center.y, z);
+        }
+        MutantConversion.effects(level, center.x, center.y, center.z, ModSounds.MUTANT_TRANSFORM.get());
     }
 }

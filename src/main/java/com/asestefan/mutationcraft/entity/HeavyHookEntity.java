@@ -14,11 +14,6 @@ public class HeavyHookEntity extends HookEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "heavy_hook";
-    }
-
-    @Override
     public Supplier<? extends EntityType<? extends Mob>> grownType() {
         return null;
     }

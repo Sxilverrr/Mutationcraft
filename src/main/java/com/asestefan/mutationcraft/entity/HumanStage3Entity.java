@@ -9,10 +9,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.level.Level;
 //? if >=1.21 {
 /*import software.bernie.geckolib.animation.AnimationState;
@@ -31,18 +27,10 @@ public class HumanStage3Entity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "human_stage_3";
-    }
-
-    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.addStandardTargets(6);
     }
 
@@ -65,18 +53,13 @@ public class HumanStage3Entity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_DEATH.get();
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.DROWN)) {
+        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS)) {
             return false;
         }
         return super.hurt(source, amount);

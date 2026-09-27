@@ -58,11 +58,6 @@ public class AssimilatedVexEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "assimilated_vex";
-    }
-
-    @Override
     protected RawAnimation movementAnimation(AnimationState<?> event) {
         return this.onGround() ? loop("idle") : loop("charge");
     }
@@ -142,7 +137,7 @@ public class AssimilatedVexEntity extends MutantEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return !source.is(DamageTypes.FALL) && !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
+        return !source.is(DamageTypes.FALL) && super.hurt(source, amount);
     }
 
     @Override

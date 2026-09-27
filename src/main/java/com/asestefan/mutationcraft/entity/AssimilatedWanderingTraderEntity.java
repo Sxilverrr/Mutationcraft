@@ -5,17 +5,12 @@ import com.asestefan.mutationcraft.behavior.HumanoidDeath;
 import com.asestefan.mutationcraft.init.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.Level;
 //? if >=1.21 {
@@ -36,18 +31,10 @@ public class AssimilatedWanderingTraderEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "assimilated_wandering_trader";
-    }
-
-    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(7, new PanicGoal(this, 1.2));
         this.addStandardTargets(8);
@@ -64,11 +51,6 @@ public class AssimilatedWanderingTraderEntity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_DEATH.get();
     }
@@ -76,7 +58,7 @@ public class AssimilatedWanderingTraderEntity extends MutantEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         AssimilatedWanderingTraderHurt.execute(this);
-        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.asestefan.mutationcraft.event;
 
+import com.asestefan.mutationcraft.platform.Services;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.MutationcraftMod;
 import com.asestefan.mutationcraft.behavior.FlameSpray;
-import com.asestefan.mutationcraft.behavior.MutantEnemies;
 import com.asestefan.mutationcraft.behavior.MutantStats;
 import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.AnimatedMutant;
@@ -90,7 +94,7 @@ public final class ModEvents {
     }
 
     public static void onEntityJoin(Entity entity) {
-        MutantEnemies.onJoin(entity);
+        mutantEnemies(entity);
         MutantStats.onJoin(entity);
     }
 
@@ -148,5 +152,27 @@ public final class ModEvents {
     }
 
     private ModEvents() {
+    }
+
+    private static final int PRIORITY = 3;
+
+    private static void mutantEnemies(Entity entity) {
+        if (!(entity instanceof Mob mob) || !(entity instanceof Enemy) || mob.level().isClientSide() || !MutationcraftConfig.HOSTILES_FIGHT_MUTANTS.get()
+                || ModUtil.isMutant(mob) || MutationcraftMod.MODID.equals(BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).getNamespace())) {
+            return;
+        }
+        GoalSelector targets = Services.PLATFORM.targetSelector(mob);
+        for (var goal : targets.getAvailableGoals()) {
+            if (goal.getGoal() instanceof HuntMutantsGoal) {
+                return;
+            }
+        }
+        targets.addGoal(PRIORITY, new HuntMutantsGoal(mob));
+    }
+
+    private static final class HuntMutantsGoal extends NearestAttackableTargetGoal<LivingEntity> {
+        private HuntMutantsGoal(Mob mob) {
+            super(mob, LivingEntity.class, 10, true, false, ModUtil::isMutant);
+        }
     }
 }

@@ -4,7 +4,6 @@ import com.asestefan.mutationcraft.behavior.CarnivoraeBehavior;
 import com.asestefan.mutationcraft.init.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,11 +39,6 @@ public class CarnivoraeEntity extends MutantEntity {
     public CarnivoraeEntity(EntityType<? extends CarnivoraeEntity> type, Level level) {
         super(type, level);
         this.xpReward = 9;
-    }
-
-    @Override
-    protected String defaultTexture() {
-        return "carnivorae";
     }
 
     @Override
@@ -91,18 +85,8 @@ public class CarnivoraeEntity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_DEATH.get();
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
     }
 
     @Override

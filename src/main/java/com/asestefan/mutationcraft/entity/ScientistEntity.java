@@ -1,6 +1,8 @@
 package com.asestefan.mutationcraft.entity;
 
-import com.asestefan.mutationcraft.behavior.ScientistDeath;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import com.asestefan.mutationcraft.init.ModItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -46,7 +48,7 @@ public class ScientistEntity extends HazmatMob {
     public void die(DamageSource source) {
         super.die(source);
         if (this.level() instanceof ServerLevel level) {
-            ScientistDeath.breakSerum(level, this.getX(), this.getY(), this.getZ());
+            scientistDeath(level, this.getX(), this.getY(), this.getZ());
         }
     }
 
@@ -57,5 +59,11 @@ public class ScientistEntity extends HazmatMob {
                 .add(Attributes.ARMOR, 0.0)
                 .add(Attributes.ATTACK_DAMAGE, 0.0)
                 .add(Attributes.FOLLOW_RANGE, 20.0);
+    }
+
+    private static void scientistDeath(ServerLevel level, double x, double y, double z) {
+        if (level.getRandom().nextDouble() <= 0.2) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SPLASH_POTION_BREAK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        }
     }
 }

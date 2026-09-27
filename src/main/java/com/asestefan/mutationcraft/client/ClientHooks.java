@@ -1,6 +1,5 @@
 package com.asestefan.mutationcraft.client;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -16,11 +15,6 @@ public final class ClientHooks {
         }
         PlayerInfo info = connection.getPlayerInfo(player.getGameProfile().getId());
         return info == null ? null : info.getGameMode();
-    }
-
-    public static boolean isFirstPersonView(Entity entity) {
-        Minecraft minecraft = Minecraft.getInstance();
-        return minecraft.getCameraEntity() == entity && minecraft.options.getCameraType().isFirstPerson();
     }
 
     public static void displayItemActivation(ItemStack stack) {

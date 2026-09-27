@@ -17,10 +17,6 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -46,11 +42,6 @@ public class TheIntoxicatorEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "the_intoxicator";
-    }
-
-    @Override
     protected RawAnimation movementAnimation(AnimationState<?> event) {
         return moving(event) ? loop("walk") : loop("idle");
     }
@@ -59,10 +50,7 @@ public class TheIntoxicatorEntity extends MutantEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.addStandardTargets(6);
     }
 
@@ -82,18 +70,13 @@ public class TheIntoxicatorEntity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_ANIMAL_DEATH.get();
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.DRAGON_BREATH)) {
+        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.DRAGON_BREATH)) {
             return false;
         }
         return super.hurt(source, amount);

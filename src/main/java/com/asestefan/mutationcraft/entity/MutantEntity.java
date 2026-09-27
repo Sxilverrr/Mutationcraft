@@ -2,6 +2,14 @@ package com.asestefan.mutationcraft.entity;
 
 import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.behavior.MutantConversion;
+import com.asestefan.mutationcraft.init.ModSounds;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,7 +58,6 @@ import software.bernie.geckolib.core.object.PlayState;
 
 public abstract class MutantEntity extends Monster implements AnimatedMutant {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MutantEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MutantEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final ProcedureAnimation procedure = new ProcedureAnimation(this.entityData, ANIMATION);
 
@@ -60,8 +67,6 @@ public abstract class MutantEntity extends Monster implements AnimatedMutant {
         this.setNoAi(false);
     }
 
-    protected abstract String defaultTexture();
-
     protected abstract RawAnimation movementAnimation(AnimationState<?> event);
 
     //? if >=1.21 {
@@ -69,24 +74,28 @@ public abstract class MutantEntity extends Monster implements AnimatedMutant {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        builder.define(TEXTURE, this.defaultTexture());
     }
     *///?} else {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        this.entityData.define(TEXTURE, this.defaultTexture());
     }
     //?}
 
     @Override
     public String getTexture() {
-        return this.entityData.get(TEXTURE);
+        return BuiltInRegistries.ENTITY_TYPE.getKey(this.getType()).getPath();
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.MUTANT_HURT.get();
     }
 
     @Override
@@ -124,6 +133,13 @@ public abstract class MutantEntity extends Monster implements AnimatedMutant {
     public static double reach(PathfinderMob mob, LivingEntity target) {
         double width = mob.getBbWidth() * 2.0;
         return width * width + target.getBbWidth();
+    }
+
+    protected void addBasicGoals() {
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new FloatGoal(this));
     }
 
     protected void addLeapGoal(float height) {

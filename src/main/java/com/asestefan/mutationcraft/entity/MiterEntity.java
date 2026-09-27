@@ -1,7 +1,12 @@
 package com.asestefan.mutationcraft.entity;
 
+import com.asestefan.mutationcraft.behavior.MutantConversion;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
+import com.asestefan.mutationcraft.init.ModEntities;
+import com.asestefan.mutationcraft.init.ModSounds;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import com.asestefan.mutationcraft.ModUtil;
-import com.asestefan.mutationcraft.behavior.MiterEvolution;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -69,7 +74,7 @@ public class MiterEntity extends PathfinderMob {
     @Override
     public void baseTick() {
         super.baseTick();
-        MiterEvolution.tick(this);
+        miterEvolution(this);
     }
 
     @Override
@@ -84,5 +89,22 @@ public class MiterEntity extends PathfinderMob {
                 .add(Attributes.ARMOR, 0.0)
                 .add(Attributes.ATTACK_DAMAGE, 0.0)
                 .add(Attributes.FOLLOW_RANGE, 16.0);
+    }
+
+    private static final String TIMER_KEY = "Timer";
+
+    private static void miterEvolution(MiterEntity miter) {
+        if (!(miter.level() instanceof ServerLevel level) || !miter.isAlive()) {
+            return;
+        }
+        if (MutationcraftConfig.MITER_EVOLVES.get()) {
+            CompoundTag data = ModUtil.data(miter);
+            int timer = data.getInt(TIMER_KEY) + 1;
+            data.putInt(TIMER_KEY, timer);
+            if (timer >= MutationcraftConfig.MITER_EVOLVE_SECONDS.ticks()) {
+                MutantConversion.evolve(miter, ModEntities.NECROPTOR.get(), ModSounds.MUTANT_TRANSFORM.get());
+                return;
+            }
+        }
     }
 }

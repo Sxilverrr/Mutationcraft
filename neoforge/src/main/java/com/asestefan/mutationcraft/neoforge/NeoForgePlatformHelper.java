@@ -1,6 +1,6 @@
 package com.asestefan.mutationcraft.neoforge;
 
-import com.asestefan.mutationcraft.effect.MutagenSicknessMobEffect;
+import com.asestefan.mutationcraft.effect.ModMobEffect;
 import com.asestefan.mutationcraft.item.FlamethrowerItem;
 import com.asestefan.mutationcraft.platform.IPlatformHelper;
 import java.util.Set;
@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -47,7 +48,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public MobEffect createMutagenSicknessEffect() {
-        return new MutagenSicknessMobEffect() {
+        return new ModMobEffect(MobEffectCategory.HARMFUL, -16777216) {
             @Override
             public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance instance) {
                 cures.add(EffectCures.PROTECTED_BY_TOTEM);

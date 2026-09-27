@@ -9,7 +9,6 @@ import com.asestefan.mutationcraft.entity.HazmatFlamethrowerEntity;
 import com.asestefan.mutationcraft.entity.HazmatMedicEntity;
 import com.asestefan.mutationcraft.entity.ScientistEntity;
 import com.asestefan.mutationcraft.entity.HazmatHelicopterEntity;
-import net.minecraft.server.level.ServerLevel;
 import com.asestefan.mutationcraft.client.ClientHooks;
 import com.asestefan.mutationcraft.platform.Services;
 import net.minecraft.core.BlockPos;
@@ -36,12 +35,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.AABB;
 //? if >=1.21 {
 /*import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.CustomData;
-import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.resources.ResourceKey;
@@ -86,12 +83,6 @@ public final class ModUtil {
 
     public static boolean isMutant(Entity entity) {
         return entity.getType().is(MUTANTS);
-    }
-
-    public static void expireAfter(Entity entity, int lifetime) {
-        if (entity.level() instanceof ServerLevel && entity.isAlive() && entity.tickCount >= lifetime) {
-            entity.discard();
-        }
     }
 
     public static boolean tryCooldown(Entity entity, String key, int ticks) {
@@ -203,38 +194,6 @@ public final class ModUtil {
         /*return ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x26FFFFFF);
         *///?} else {
         return ParticleTypes.AMBIENT_ENTITY_EFFECT;
-        //?}
-    }
-
-    public static int spawnX(LevelData data) {
-        //? if >=1.21 {
-        /*return data.getSpawnPos().getX();
-        *///?} else {
-        return data.getXSpawn();
-        //?}
-    }
-
-    public static int spawnY(LevelData data) {
-        //? if >=1.21 {
-        /*return data.getSpawnPos().getY();
-        *///?} else {
-        return data.getYSpawn();
-        //?}
-    }
-
-    public static int spawnZ(LevelData data) {
-        //? if >=1.21 {
-        /*return data.getSpawnPos().getZ();
-        *///?} else {
-        return data.getZSpawn();
-        //?}
-    }
-
-    public static void awardRecipe(ServerPlayer player, ResourceLocation recipe) {
-        //? if >=1.21 {
-        /*player.awardRecipesByKey(List.of(recipe));
-        *///?} else {
-        player.awardRecipesByKey(new ResourceLocation[]{recipe});
         //?}
     }
 

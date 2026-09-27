@@ -16,11 +16,6 @@ public class LightHookEntity extends HookEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "light_hook";
-    }
-
-    @Override
     public Supplier<? extends EntityType<? extends Mob>> grownType() {
         return ModEntities.MEDIUM_HOOK;
     }

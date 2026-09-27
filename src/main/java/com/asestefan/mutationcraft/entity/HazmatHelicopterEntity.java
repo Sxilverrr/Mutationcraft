@@ -48,7 +48,6 @@ import software.bernie.geckolib.core.object.PlayState;
 
 public class HazmatHelicopterEntity extends PathfinderMob implements AnimatedMutant {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(HazmatHelicopterEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(HazmatHelicopterEntity.class, EntityDataSerializers.STRING);
     private static final RawAnimation FLY = RawAnimation.begin().thenLoop("fly");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final ProcedureAnimation procedure = new ProcedureAnimation(this.entityData, ANIMATION);
@@ -66,24 +65,18 @@ public class HazmatHelicopterEntity extends PathfinderMob implements AnimatedMut
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        builder.define(TEXTURE, "hazmat_helicopter");
     }
     *///?} else {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        this.entityData.define(TEXTURE, "hazmat_helicopter");
     }
     //?}
 
     @Override
     public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
+        return "hazmat_helicopter";
     }
 
     @Override

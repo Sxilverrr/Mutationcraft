@@ -16,11 +16,6 @@ public class MediumHookEntity extends HookEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "medium_hook";
-    }
-
-    @Override
     public Supplier<? extends EntityType<? extends Mob>> grownType() {
         return ModEntities.HEAVY_HOOK;
     }

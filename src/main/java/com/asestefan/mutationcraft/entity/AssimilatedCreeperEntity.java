@@ -1,22 +1,20 @@
 package com.asestefan.mutationcraft.entity;
 
+import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.MutationcraftMod;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
+import net.minecraft.world.level.GameType;
 import com.asestefan.mutationcraft.behavior.AnimalDeath;
 import com.asestefan.mutationcraft.behavior.AnimalHurt;
-import com.asestefan.mutationcraft.behavior.AssimilatedCreeperFuse;
 import com.asestefan.mutationcraft.init.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,18 +33,10 @@ public class AssimilatedCreeperEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "assimilated_creeper";
-    }
-
-    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.targetSelector.addGoal(6, target(this, Player.class));
         MutantEntity.addPreyTarget(this, this.targetSelector, 30);
     }
@@ -81,9 +71,6 @@ public class AssimilatedCreeperEntity extends MutantEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN)) {
-            return false;
-        }
         return super.hurt(source, amount + AnimalHurt.fireAspectBonus(source, true));
     }
 
@@ -96,7 +83,7 @@ public class AssimilatedCreeperEntity extends MutantEntity {
     @Override
     public void playerTouch(Player player) {
         super.playerTouch(player);
-        AssimilatedCreeperFuse.onPlayerTouch(this, player);
+        assimilatedCreeperFuse(this, player);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -108,5 +95,27 @@ public class AssimilatedCreeperEntity extends MutantEntity {
                 .add(Attributes.FOLLOW_RANGE, 32.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.7)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.3);
+    }
+
+    private static final int FUSE = 20;
+    private static final String COOLDOWN = "mutationcraft:creeper_fuse";
+
+    private static void assimilatedCreeperFuse(AssimilatedCreeperEntity creeper, Player player) {
+        Level level = creeper.level();
+        if (level.isClientSide() || !creeper.isAlive() || creeper.getHealth() > 10.0F || !MutationcraftConfig.ASSIMILATED_CREEPER_EXPLODES.get()) {
+            return;
+        }
+        if (!ModUtil.isGameMode(player, GameType.SURVIVAL) && !ModUtil.isGameMode(player, GameType.ADVENTURE)) {
+            return;
+        }
+        if (!ModUtil.tryCooldown(creeper, COOLDOWN, FUSE + 20)) {
+            return;
+        }
+        creeper.playAnimation("explosion");
+        MutationcraftMod.queueServerWork(level, FUSE, () -> {
+            if (creeper.isAlive() && !creeper.isRemoved()) {
+                level.explode(null, creeper.getX(), creeper.getY(), creeper.getZ(), (float) MutationcraftConfig.ASSIMILATED_CREEPER_EXPLOSION_POWER.get(), Level.ExplosionInteraction.MOB);
+            }
+        });
     }
 }

@@ -287,12 +287,6 @@
     ],
     "subtitle": "subtitles.mutationcraft.item.flamethrower.bubble"
   },
-  "item.flamethrower.burn": {
-    "sounds": [
-      "mutationcraft:item/flamethrower/burn"
-    ],
-    "subtitle": "subtitles.mutationcraft.item.flamethrower.burn"
-  },
   "item.flamethrower.overheat": {
     "sounds": [
       {

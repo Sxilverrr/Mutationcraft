@@ -1,8 +1,8 @@
 package com.asestefan.mutationcraft.entity;
 
+import com.asestefan.mutationcraft.behavior.AberrationSpawns;
 import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.behavior.MutantConversion;
-import com.asestefan.mutationcraft.behavior.ReductorBehavior;
 import com.asestefan.mutationcraft.init.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -68,7 +68,6 @@ import software.bernie.geckolib.core.object.PlayState;
 
 public class ReductorEntity extends Spider implements AnimatedMutant {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ReductorEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ReductorEntity.class, EntityDataSerializers.STRING);
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -85,24 +84,18 @@ public class ReductorEntity extends Spider implements AnimatedMutant {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        builder.define(TEXTURE, "reductor");
     }
     *///?} else {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION, ProcedureAnimation.UNDEFINED);
-        this.entityData.define(TEXTURE, "reductor");
     }
     //?}
 
     @Override
     public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
+        return "reductor";
     }
 
     @Override
@@ -162,7 +155,7 @@ public class ReductorEntity extends Spider implements AnimatedMutant {
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        ReductorBehavior.onDeath(this, source.getEntity());
+        reductorBehavior(this, source.getEntity());
     }
 
     //? if >=1.21 {
@@ -240,5 +233,13 @@ public class ReductorEntity extends Spider implements AnimatedMutant {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    private static void reductorBehavior(ReductorEntity reductor, Entity killer) {
+        if (killer == null) {
+            return;
+        }
+        AberrationSpawns.deathSpawns(reductor);
+        AberrationSpawns.mutagenSickness(killer, 2000);
     }
 }

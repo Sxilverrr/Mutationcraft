@@ -6,7 +6,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -34,11 +33,6 @@ public class AssimilatedEvokerEntity extends MutantEntity {
     public AssimilatedEvokerEntity(EntityType<? extends AssimilatedEvokerEntity> type, Level level) {
         super(type, level);
         this.xpReward = 11;
-    }
-
-    @Override
-    protected String defaultTexture() {
-        return "assimilated_evoker";
     }
 
     @Override
@@ -76,9 +70,6 @@ public class AssimilatedEvokerEntity extends MutantEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN)) {
-            return false;
-        }
         this.pendingDamage = source;
         try {
             return super.hurt(source, amount);

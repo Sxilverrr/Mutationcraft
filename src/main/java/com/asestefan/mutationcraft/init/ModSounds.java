@@ -56,7 +56,6 @@ public final class ModSounds {
     public static final ModRegistry.Entry<SoundEvent> THE_INTOXICATOR_SCREAM = register("entity.the_intoxicator.scream");
     public static final ModRegistry.Entry<SoundEvent> VILLAGE_ALARM = register("event.village.alarm");
     public static final ModRegistry.Entry<SoundEvent> VILLAGE_AMBULANCE = register("event.village.ambulance");
-    public static final ModRegistry.Entry<SoundEvent> ITEM_FLAMETHROWER_BURN = register("item.flamethrower.burn");
 
     public static final ModRegistry.Entry<SoundEvent> FLAMETHROWER_USE = register("item.flamethrower.use", 32.0F);
     public static final ModRegistry.Entry<SoundEvent> FLAMETHROWER_BUBBLE = register("item.flamethrower.bubble");

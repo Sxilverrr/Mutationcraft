@@ -1,6 +1,10 @@
 package com.asestefan.mutationcraft.entity;
 
-import com.asestefan.mutationcraft.behavior.RottenSkeletonAwaken;
+import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.init.ModEntities;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -14,10 +18,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -38,18 +38,10 @@ public class RottenSkeletonEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "rotten_skeleton";
-    }
-
-    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
     }
 
     @Override
@@ -78,7 +70,7 @@ public class RottenSkeletonEntity extends MutantEntity {
         if (direct instanceof AbstractArrow || direct instanceof Player || direct instanceof ThrownPotion || direct instanceof AreaEffectCloud) {
             return false;
         }
-        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.LIGHTNING_BOLT)
+        if (source.is(DamageTypes.FALL) || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.LIGHTNING_BOLT)
                 || source.is(DamageTypeTags.IS_EXPLOSION) || source.is(DamageTypes.TRIDENT) || source.is(DamageTypes.FALLING_ANVIL)
                 || source.is(DamageTypes.DRAGON_BREATH) || source.is(DamageTypes.WITHER) || source.is(DamageTypes.WITHER_SKULL)) {
             return false;
@@ -89,7 +81,7 @@ public class RottenSkeletonEntity extends MutantEntity {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         super.mobInteract(player, hand);
-        RottenSkeletonAwaken.execute(this);
+        rottenSkeletonAwaken(this);
         return InteractionResult.sidedSuccess(this.level().isClientSide());
     }
 
@@ -100,5 +92,18 @@ public class RottenSkeletonEntity extends MutantEntity {
                 .add(Attributes.ARMOR, 0.0)
                 .add(Attributes.ATTACK_DAMAGE, 0.0)
                 .add(Attributes.FOLLOW_RANGE, 16.0);
+    }
+
+    private static void rottenSkeletonAwaken(LivingEntity skeleton) {
+        if (!(skeleton.level() instanceof ServerLevel level) || !skeleton.isAlive()) {
+            return;
+        }
+        TheIntoxicatorEntity boss = ModEntities.THE_INTOXICATOR.get().create(level);
+        if (boss != null) {
+            boss.moveTo(skeleton.getX(), skeleton.getY(), skeleton.getZ(), level.getRandom().nextFloat() * 360.0F, 0.0F);
+            ModUtil.finalizeSpawn(boss, level, level.getCurrentDifficultyAt(boss.blockPosition()), MobSpawnType.MOB_SUMMONED);
+            level.addFreshEntity(boss);
+        }
+        skeleton.kill();
     }
 }

@@ -1,19 +1,17 @@
 package com.asestefan.mutationcraft.entity;
 
-import com.asestefan.mutationcraft.behavior.HumanHerderSlam;
+import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.MutationcraftMod;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import com.asestefan.mutationcraft.init.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,11 +30,6 @@ public class HumanHerderEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "human_herder";
-    }
-
-    @Override
     protected RawAnimation movementAnimation(AnimationState<?> event) {
         return moving(event) ? loop("walk") : loop("Idle");
     }
@@ -45,10 +38,7 @@ public class HumanHerderEntity extends MutantEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.addStandardTargets(6);
     }
 
@@ -63,24 +53,14 @@ public class HumanHerderEntity extends MutantEntity {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MUTANT_HURT.get();
-    }
-
-    @Override
     public SoundEvent getDeathSound() {
         return ModSounds.MUTANT_DEATH.get();
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !source.is(DamageTypes.DROWN) && super.hurt(source, amount);
-    }
-
-    @Override
     public void playerTouch(Player player) {
         super.playerTouch(player);
-        HumanHerderSlam.onTouch(this, player);
+        humanHerderSlam(this, player);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -92,5 +72,25 @@ public class HumanHerderEntity extends MutantEntity {
                 .add(Attributes.FOLLOW_RANGE, 32.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.0)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.2);
+    }
+
+    private static final String COOLDOWN_KEY = "mutationcraft:touch_cooldown";
+
+    private static void humanHerderSlam(HumanHerderEntity herder, Player player) {
+        if (!(herder.level() instanceof ServerLevel level) || !herder.isAlive() || player.isCreative() || player.isSpectator()
+                || herder.getRandom().nextDouble() > 0.15 || !ModUtil.tryCooldown(herder, COOLDOWN_KEY, 40)) {
+            return;
+        }
+        herder.playAnimation("slam");
+        double x = herder.getX();
+        double y = herder.getY();
+        double z = herder.getZ();
+        MutationcraftMod.queueServerWork(level, 30, () -> {
+            if (!player.isAlive() || player.level() != level) {
+                return;
+            }
+            ModUtil.launchAway(herder, player, 2.0, 1.2);
+            level.playSound(null, x, y, z, SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        });
     }
 }

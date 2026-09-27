@@ -12,11 +12,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreakDoorGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.Villager;
@@ -42,11 +38,6 @@ public class CorrosionQueenEntity extends MutantEntity {
     }
 
     @Override
-    protected String defaultTexture() {
-        return "corrosion_queen";
-    }
-
-    @Override
     protected RawAnimation movementAnimation(AnimationState<?> event) {
         return moving(event) ? loop("walk") : loop("idle");
     }
@@ -55,10 +46,7 @@ public class CorrosionQueenEntity extends MutantEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, this.meleeGoal(1.2));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.addBasicGoals();
         this.goalSelector.addGoal(6, new BreakDoorGoal(this, difficulty -> true));
         this.goalSelector.addGoal(7, new PanicGoal(this, 1.2));
         this.targetSelector.addGoal(8, target(this, Player.class));
@@ -96,7 +84,7 @@ public class CorrosionQueenEntity extends MutantEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud
-                || source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN)) {
+                || source.is(DamageTypes.FALL)) {
             return false;
         }
         return super.hurt(source, amount);
