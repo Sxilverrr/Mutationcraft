@@ -27,7 +27,7 @@ public final class NecroptorBehavior {
     }
 
     public static void onAttack(LivingEntity victim, Entity attacker) {
-        if (attacker instanceof NecroptorEntity && victim.getRandom().nextDouble() < 0.2) {
+        if (attacker instanceof NecroptorEntity && victim.getRandom().nextDouble() < MutationcraftConfig.NECROPTOR_SLOWNESS_CHANCE.get()) {
             victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0));
         }
     }
@@ -45,7 +45,7 @@ public final class NecroptorBehavior {
     }
 
     private static void spawnHook(ServerLevel level, LivingEntity necroptor) {
-        if (!MutationcraftConfig.HOOKS_FROM_NECROPTORS.get() || level.getRandom().nextDouble() > 0.05) {
+        if (!MutationcraftConfig.HOOKS_FROM_NECROPTORS.get() || level.getRandom().nextDouble() >= MutationcraftConfig.HOOK_FROM_NECROPTOR_CHANCE.get()) {
             return;
         }
         RandomSource random = level.getRandom();

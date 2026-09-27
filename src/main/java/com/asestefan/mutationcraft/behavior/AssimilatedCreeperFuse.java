@@ -2,6 +2,7 @@ package com.asestefan.mutationcraft.behavior;
 
 import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.MutationcraftMod;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.AssimilatedCreeperEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -13,7 +14,7 @@ public final class AssimilatedCreeperFuse {
 
     public static void onPlayerTouch(AssimilatedCreeperEntity creeper, Player player) {
         Level level = creeper.level();
-        if (level.isClientSide() || !creeper.isAlive() || creeper.getHealth() > 10.0F) {
+        if (level.isClientSide() || !creeper.isAlive() || creeper.getHealth() > 10.0F || !MutationcraftConfig.ASSIMILATED_CREEPER_EXPLODES.get()) {
             return;
         }
         if (!ModUtil.isGameMode(player, GameType.SURVIVAL) && !ModUtil.isGameMode(player, GameType.ADVENTURE)) {
@@ -25,7 +26,7 @@ public final class AssimilatedCreeperFuse {
         creeper.playAnimation("explosion");
         MutationcraftMod.queueServerWork(level, FUSE, () -> {
             if (creeper.isAlive() && !creeper.isRemoved()) {
-                level.explode(null, creeper.getX(), creeper.getY(), creeper.getZ(), 5.0F, Level.ExplosionInteraction.MOB);
+                level.explode(null, creeper.getX(), creeper.getY(), creeper.getZ(), (float) MutationcraftConfig.ASSIMILATED_CREEPER_EXPLOSION_POWER.get(), Level.ExplosionInteraction.MOB);
             }
         });
     }

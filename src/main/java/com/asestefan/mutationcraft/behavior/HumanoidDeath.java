@@ -1,6 +1,7 @@
 package com.asestefan.mutationcraft.behavior;
 
 import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.init.ModEntities;
 import com.asestefan.mutationcraft.init.ModMobEffects;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +20,7 @@ public final class HumanoidDeath {
         if (!(mob.level() instanceof ServerLevel level) || source.getEntity() == null) {
             return;
         }
-        if (source.getEntity() instanceof LivingEntity killer) {
+        if (source.getEntity() instanceof LivingEntity killer && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             killer.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), sicknessTicks, 0));
         }
         spawnParasites(level, mob.getX(), mob.getY(), mob.getZ());
@@ -27,7 +28,7 @@ public final class HumanoidDeath {
 
     private static void spawnParasites(ServerLevel level, double x, double y, double z) {
         RandomSource random = level.getRandom();
-        double first = random.nextDouble();
+        double first = MutationcraftConfig.MUTANTS_SPAWN_PARASITES.get() ? random.nextDouble() : 1.0;
         double second = random.nextDouble();
         if (first <= 0.05) {
             if (second <= 0.05) {

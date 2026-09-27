@@ -90,7 +90,7 @@ public final class TheIntoxicatorBehavior {
             lightning.setVisualOnly(true);
             level.addFreshEntity(lightning);
         }
-        if (killer instanceof LivingEntity living) {
+        if (killer instanceof LivingEntity living && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             living.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), 2000, 0));
         }
     }

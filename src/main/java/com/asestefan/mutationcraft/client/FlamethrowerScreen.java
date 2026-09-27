@@ -54,7 +54,7 @@ public class FlamethrowerScreen extends AbstractContainerScreen<FlamethrowerMenu
         } else if (this.inside(mouseX, mouseY, HEAT_GAUGE_X)) {
             Component text = FlamethrowerItem.overheated(stack)
                     ? Component.translatable("item.mutationcraft.flamethrower.overheated")
-                    : Component.translatable("item.mutationcraft.flamethrower.heat", FlamethrowerItem.heat(stack) * 100 / FlamethrowerItem.maxHeat());
+                    : Component.translatable("item.mutationcraft.flamethrower.heat", FlamethrowerItem.heatPercent(stack));
             graphics.renderTooltip(this.font, text, mouseX, mouseY);
         }
     }
@@ -78,7 +78,7 @@ public class FlamethrowerScreen extends AbstractContainerScreen<FlamethrowerMenu
             graphics.fill(sx + 1, sy + 1, sx + 17, sy + 17, SLOT);
         }
         ItemStack stack = this.menu.flamethrower();
-        float fuel = Math.min(1.0F, FlamethrowerFuel.totalFuel(stack) / (float) FlamethrowerFuel.CAPACITY);
+        float fuel = Math.min(1.0F, FlamethrowerFuel.totalFuel(stack) / (float) FlamethrowerFuel.capacity());
         float heat = FlamethrowerItem.heat(stack) / (float) FlamethrowerItem.maxHeat();
         this.gauge(graphics, x + FUEL_GAUGE_X, y + GAUGE_TOP, fuel, FUEL_COLOR);
         this.gauge(graphics, x + HEAT_GAUGE_X, y + GAUGE_TOP, heat, FlamethrowerItem.overheated(stack) ? OVERHEAT_COLOR : HEAT_COLOR);

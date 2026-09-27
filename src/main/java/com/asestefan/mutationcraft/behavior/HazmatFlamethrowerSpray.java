@@ -1,5 +1,6 @@
 package com.asestefan.mutationcraft.behavior;
 
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -9,8 +10,6 @@ import net.minecraft.world.phys.Vec3;
 public final class HazmatFlamethrowerSpray {
     public static final int BURST_TICKS = 30;
     public static final double BURST_RANGE = 10.0;
-    private static final float DAMAGE = 1.0F;
-    private static final double IGNITE_CHANCE = 0.05;
 
     public static Vec3 aim(Mob mob, LivingEntity target) {
         return target.getBoundingBox().getCenter().subtract(mob.getEyePosition().add(0.0, -0.4, 0.0)).normalize();
@@ -33,7 +32,7 @@ public final class HazmatFlamethrowerSpray {
         Vec3 origin = FlameSpray.tip(mob, direction);
         FlameSpray.particles(level, mob, origin, direction);
         if (tick % 3 == 0) {
-            FlameSpray.burn(level, mob, origin, direction, DAMAGE, IGNITE_CHANCE, ItemStack.EMPTY);
+            FlameSpray.burn(level, mob, origin, direction, (float) MutationcraftConfig.HAZMAT_FLAMETHROWER_DAMAGE.get(), MutationcraftConfig.HAZMAT_FLAMETHROWER_FIRE_CHANCE.get(), ItemStack.EMPTY);
         }
     }
 

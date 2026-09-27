@@ -4,6 +4,7 @@ import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.MutationcraftMod;
 import com.asestefan.mutationcraft.behavior.FlameSpray;
 import com.asestefan.mutationcraft.behavior.MutantEnemies;
+import com.asestefan.mutationcraft.behavior.MutantStats;
 import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.AnimatedMutant;
 import com.asestefan.mutationcraft.init.ModMobEffects;
@@ -36,8 +37,8 @@ public final class ModEvents {
     }
 
     public static float onLivingHurt(LivingEntity entity, DamageSource source, float amount) {
-        if (!entity.level().isClientSide() && ModUtil.isMutant(entity) && entity.isOnFire()) {
-            amount *= 2.0F;
+        if (!entity.level().isClientSide() && ModUtil.isMutant(entity) && entity.isOnFire() && MutationcraftConfig.BURNING_MUTANTS_TAKE_MORE_DAMAGE.get()) {
+            amount *= (float) MutationcraftConfig.BURNING_MUTANT_DAMAGE_MULTIPLIER.get();
         }
         for (EventHandler handler : HANDLERS) {
             amount = handler.onLivingHurt(entity, source, amount);
@@ -90,6 +91,7 @@ public final class ModEvents {
 
     public static void onEntityJoin(Entity entity) {
         MutantEnemies.onJoin(entity);
+        MutantStats.onJoin(entity);
     }
 
     public static boolean onEntityInteract(Player player, Entity target, InteractionHand hand) {

@@ -4,6 +4,7 @@ import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.behavior.AssimilatedEndermanBehavior;
 import com.asestefan.mutationcraft.behavior.AssimilatedEvokerBehavior;
 import com.asestefan.mutationcraft.behavior.AssimilatedWitchBehavior;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.AssimilatedEndermanEntity;
 import com.asestefan.mutationcraft.entity.AssimilatedEvokerEntity;
 import com.asestefan.mutationcraft.entity.AssimilatedVexEntity;
@@ -89,7 +90,7 @@ public class IllagerEvents implements EventHandler {
         if (!(entity.level() instanceof ServerLevel level)) {
             return;
         }
-        double roll = level.getRandom().nextDouble();
+        double roll = MutationcraftConfig.MUTANTS_SPAWN_PARASITES.get() ? level.getRandom().nextDouble() : 1.0;
         double chance = level.getRandom().nextDouble();
         if (roll <= 0.05) {
             if (chance <= 0.05) {
@@ -100,7 +101,7 @@ public class IllagerEvents implements EventHandler {
         } else if (roll <= 0.2 && chance <= 0.2) {
             spawn(level, ModEntities.NECROPTOR.get(), entity);
         }
-        if (killer instanceof LivingEntity living) {
+        if (killer instanceof LivingEntity living && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             living.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), 2000, 0));
         }
     }

@@ -1,13 +1,13 @@
 package com.asestefan.mutationcraft.item;
 
 import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import java.util.Map;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public final class FlamethrowerFuel {
-    public static final int CAPACITY = 2400;
     private static final String TANK = "Tank";
     private static Map<Item, Integer> values;
 
@@ -24,6 +24,14 @@ public final class FlamethrowerFuel {
         return values;
     }
 
+    public static int capacity() {
+        return Math.max(1, MutationcraftConfig.FLAMETHROWER_TANK_CAPACITY.ticks());
+    }
+
+    public static boolean needed() {
+        return MutationcraftConfig.FLAMETHROWER_NEEDS_FUEL.get();
+    }
+
     public static boolean isFuel(ItemStack stack) {
         return values().containsKey(stack.getItem());
     }
@@ -37,11 +45,12 @@ public final class FlamethrowerFuel {
     }
 
     public static ItemStack absorb(ItemStack flamethrower, ItemStack fuel) {
-        int value = values().getOrDefault(fuel.getItem(), 0);
-        if (fuel.isEmpty() || value <= 0) {
+        int base = values().getOrDefault(fuel.getItem(), 0);
+        if (fuel.isEmpty() || base <= 0) {
             return fuel;
         }
-        int space = CAPACITY - totalFuel(flamethrower);
+        int value = Math.max(1, (int) Math.round(base * MutationcraftConfig.FLAMETHROWER_FUEL_MULTIPLIER.get()));
+        int space = capacity() - totalFuel(flamethrower);
         int used = Math.min(fuel.getCount(), space / value);
         if (used <= 0) {
             return fuel;

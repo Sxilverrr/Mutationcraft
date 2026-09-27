@@ -66,7 +66,7 @@ public final class MutantConversion {
             }
             return;
         }
-        if (weak && level.getRandom().nextDouble() > 0.1) {
+        if (!MutationcraftConfig.MUTANTS_CONVERT_MOBS.get() || weak && level.getRandom().nextDouble() > 0.1) {
             return;
         }
         Supplier<? extends EntityType<? extends Mob>> result = table().get(victim.getType());

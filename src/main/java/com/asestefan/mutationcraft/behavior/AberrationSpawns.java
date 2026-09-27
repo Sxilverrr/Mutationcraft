@@ -1,6 +1,7 @@
 package com.asestefan.mutationcraft.behavior;
 
 import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.init.ModEntities;
 import com.asestefan.mutationcraft.init.ModMobEffects;
 import net.minecraft.server.level.ServerLevel;
@@ -44,7 +45,7 @@ public final class AberrationSpawns {
             return;
         }
         RandomSource random = level.getRandom();
-        double r1 = random.nextDouble();
+        double r1 = MutationcraftConfig.MUTANTS_SPAWN_PARASITES.get() ? random.nextDouble() : 1.0;
         double r2 = random.nextDouble();
         if (r1 <= 0.05) {
             if (r2 <= 0.05) {
@@ -58,7 +59,7 @@ public final class AberrationSpawns {
     }
 
     public static void mutagenSickness(Entity killer, int duration) {
-        if (killer instanceof LivingEntity living && !living.level().isClientSide()) {
+        if (killer instanceof LivingEntity living && !living.level().isClientSide() && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             living.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), duration, 0));
         }
     }

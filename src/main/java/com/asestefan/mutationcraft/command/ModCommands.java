@@ -2,6 +2,7 @@ package com.asestefan.mutationcraft.command;
 
 import com.asestefan.mutationcraft.ModUtil;
 import com.asestefan.mutationcraft.behavior.Spawning;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.init.ModMobEffects;
 import com.asestefan.mutationcraft.network.ModVariables;
 import com.mojang.brigadier.CommandDispatcher;
@@ -85,8 +86,10 @@ public final class ModCommands {
         }
         for (int i = 0; i < TIERS.length; i++) {
             Component tier = Component.translatable("commands.mutationcraft.tier." + TIERS[i]);
-            double threshold = THRESHOLDS[i][Math.max(0, Math.min(stage, THRESHOLDS[i].length - 1))];
-            if (time > threshold) {
+            double threshold = Spawning.threshold(THRESHOLDS[i], stage);
+            if (!Spawning.enabled(THRESHOLDS[i])) {
+                reply(source, Component.translatable("commands.mutationcraft.stage.disabled", tier), false);
+            } else if (time > threshold) {
                 reply(source, Component.translatable("commands.mutationcraft.stage.spawning", tier), false);
             } else {
                 reply(source, Component.translatable("commands.mutationcraft.stage.locked", tier, format(threshold)), false);
@@ -127,7 +130,7 @@ public final class ModCommands {
 
     private static int reset(CommandContext<CommandSourceStack> ctx) {
         ModVariables.MapVariables variables = ModVariables.MapVariables.get(overworld(ctx));
-        variables.stage = 0;
+        variables.stage = MutationcraftConfig.STARTING_STAGE.getInt();
         variables.paused = false;
         variables.time = 0.0;
         variables.setDirty();

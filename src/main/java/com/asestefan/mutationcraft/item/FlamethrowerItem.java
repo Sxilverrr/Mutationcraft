@@ -40,7 +40,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 
 public class FlamethrowerItem extends Item {
     private static final int USE_DURATION = 72000;
-    private static final float DAMAGE = 1.5F;
     private static final int DURABILITY_INTERVAL = 5;
     private static final String HEAT = "Heat";
     private static final String OVERHEATED = "Overheated";
@@ -99,14 +98,14 @@ public class FlamethrowerItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (player.isSecondaryUseActive()) {
+        if (player.isSecondaryUseActive() && FlamethrowerFuel.needed()) {
             if (!level.isClientSide()) {
                 player.openMenu(new SimpleMenuProvider((id, inventory, owner) -> new FlamethrowerMenu(id, inventory, hand),
                         Component.translatable("container.mutationcraft.flamethrower")));
             }
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
-        if (overheated(stack) || !player.getAbilities().instabuild && !FlamethrowerFuel.hasFuel(stack)) {
+        if (overheated(stack) || !player.getAbilities().instabuild && FlamethrowerFuel.needed() && !FlamethrowerFuel.hasFuel(stack)) {
             level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.DISPENSER_FAIL, SoundSource.PLAYERS, 0.6F, 1.4F);
             return InteractionResultHolder.fail(stack);
         }
@@ -123,18 +122,18 @@ public class FlamethrowerItem extends Item {
         int used = USE_DURATION - remaining;
         boolean creative = entity instanceof Player player && player.getAbilities().instabuild;
         if (!creative) {
-            if (!FlamethrowerFuel.consume(stack, 1)) {
+            if (FlamethrowerFuel.needed() && !FlamethrowerFuel.consume(stack, 1)) {
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DISPENSER_FAIL, SoundSource.PLAYERS, 0.6F, 1.4F);
                 entity.stopUsingItem();
                 return;
             }
-            if (!FlameSpray.submerged(entity) && addHeat(stack)) {
+            if (MutationcraftConfig.FLAMETHROWER_OVERHEATS.get() && !FlameSpray.submerged(entity) && addHeat(stack)) {
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.FLAMETHROWER_OVERHEAT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 server.sendParticles(ParticleTypes.LARGE_SMOKE, entity.getX(), entity.getEyeY() - 0.4, entity.getZ(), 8, 0.2, 0.2, 0.2, 0.02);
                 entity.stopUsingItem();
                 return;
             }
-            if (used % DURABILITY_INTERVAL == 0) {
+            if (MutationcraftConfig.FLAMETHROWER_USES_DURABILITY.get() && used % DURABILITY_INTERVAL == 0) {
                 //? if >=1.21 {
                 /*stack.hurtAndBreak(1, entity, LivingEntity.getSlotForHand(entity.getUsedItemHand()));
                 *///?} else {
@@ -150,7 +149,7 @@ public class FlamethrowerItem extends Item {
         Vec3 origin = FlameSpray.tip(entity, direction);
         FlameSpray.particles(server, entity, origin, direction);
         if (used % 3 == 0) {
-            FlameSpray.burn(server, entity, origin, direction, DAMAGE, stack);
+            FlameSpray.burn(server, entity, origin, direction, (float) MutationcraftConfig.FLAMETHROWER_DAMAGE.get(), stack);
         }
     }
 
@@ -162,13 +161,13 @@ public class FlamethrowerItem extends Item {
         if (entity instanceof LivingEntity living && living.isUsingItem() && living.getUseItem() == stack && !FlameSpray.submerged(living)) {
             return;
         }
-        int heat = heat(stack) - 1;
+        float heat = heat(stack) - maxHeat() / (float) Math.max(1, MutationcraftConfig.FLAMETHROWER_COOLDOWN_SECONDS.ticks());
         ModUtil.updateItemData(stack, data -> {
-            if (heat <= 0) {
+            if (heat <= 0.0F) {
                 data.remove(HEAT);
                 data.remove(OVERHEATED);
             } else {
-                data.putInt(HEAT, heat);
+                data.putFloat(HEAT, heat);
             }
         });
     }
@@ -180,7 +179,7 @@ public class FlamethrowerItem extends Item {
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean result = super.hurtEnemy(stack, target, attacker);
-        if (!target.level().isClientSide() && target.getRandom().nextDouble() <= 0.2) {
+        if (!target.level().isClientSide() && target.getRandom().nextDouble() < MutationcraftConfig.FLAMETHROWER_MELEE_FIRE_CHANCE.get()) {
             ModUtil.setOnFire(target, 5);
         }
         return result;
@@ -201,18 +200,26 @@ public class FlamethrowerItem extends Item {
     //?}
 
     private static void tooltip(ItemStack stack, List<Component> list) {
-        int seconds = FlamethrowerFuel.totalFuel(stack) / 20;
-        list.add(Component.translatable("item.mutationcraft.flamethrower.fuel", String.format("%d:%02d", seconds / 60, seconds % 60)).withStyle(ChatFormatting.GOLD));
+        if (FlamethrowerFuel.needed()) {
+            int seconds = FlamethrowerFuel.totalFuel(stack) / 20;
+            list.add(Component.translatable("item.mutationcraft.flamethrower.fuel", String.format("%d:%02d", seconds / 60, seconds % 60)).withStyle(ChatFormatting.GOLD));
+        }
         if (overheated(stack)) {
             list.add(Component.translatable("item.mutationcraft.flamethrower.overheated").withStyle(ChatFormatting.RED));
         } else if (heat(stack) > 0) {
-            list.add(Component.translatable("item.mutationcraft.flamethrower.heat", heat(stack) * 100 / maxHeat()).withStyle(ChatFormatting.RED));
+            list.add(Component.translatable("item.mutationcraft.flamethrower.heat", heatPercent(stack)).withStyle(ChatFormatting.RED));
         }
-        list.add(Component.translatable("item.mutationcraft.flamethrower.hint").withStyle(ChatFormatting.GRAY));
+        if (FlamethrowerFuel.needed()) {
+            list.add(Component.translatable("item.mutationcraft.flamethrower.hint").withStyle(ChatFormatting.GRAY));
+        }
     }
 
-    public static int heat(ItemStack stack) {
-        return ModUtil.itemData(stack).getInt(HEAT);
+    public static float heat(ItemStack stack) {
+        return ModUtil.itemData(stack).getFloat(HEAT);
+    }
+
+    public static int heatPercent(ItemStack stack) {
+        return Math.min(100, (int) Math.ceil(heat(stack) * 100.0F / maxHeat()));
     }
 
     public static boolean overheated(ItemStack stack) {
@@ -220,10 +227,10 @@ public class FlamethrowerItem extends Item {
     }
 
     private static boolean addHeat(ItemStack stack) {
-        int heat = Math.min(maxHeat(), heat(stack) + 1);
+        float heat = Math.min(maxHeat(), heat(stack) + 1.0F);
         boolean overheat = heat >= maxHeat();
         ModUtil.updateItemData(stack, data -> {
-            data.putInt(HEAT, heat);
+            data.putFloat(HEAT, heat);
             if (overheat) {
                 data.putBoolean(OVERHEATED, true);
             }

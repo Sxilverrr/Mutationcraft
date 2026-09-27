@@ -1,5 +1,6 @@
 package com.asestefan.mutationcraft.network;
 
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.platform.Services;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -26,11 +27,11 @@ public final class ModVariables {
     }
 
     public static void tickTime(Level level) {
-        if (level.isClientSide() || ModVariables.paused(level)) {
+        if (level.isClientSide() || ModVariables.paused(level) || !MutationcraftConfig.OUTBREAK_TIMER_RUNS.get()) {
             return;
         }
         MapVariables data = MapVariables.get(level);
-        data.time += 0.5;
+        data.time += 0.5 * MutationcraftConfig.OUTBREAK_TIMER_SPEED.get();
         data.setDirty();
     }
 
@@ -52,6 +53,12 @@ public final class ModVariables {
         public double time = 0.0;
         public int stage = 0;
         public boolean paused = false;
+
+        public static MapVariables create() {
+            MapVariables data = new MapVariables();
+            data.stage = MutationcraftConfig.STARTING_STAGE.getInt();
+            return data;
+        }
 
         public static MapVariables load(CompoundTag tag) {
             MapVariables data = new MapVariables();
@@ -88,9 +95,9 @@ public final class ModVariables {
             if (world instanceof ServerLevelAccessor serverLevelAcc) {
                 ServerLevel overworld = serverLevelAcc.getLevel().getServer().getLevel(Level.OVERWORLD);
                 //? if >=1.21 {
-                /*return overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(MapVariables::new, (tag, provider) -> load(tag), null), DATA_NAME);
+                /*return overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(MapVariables::create, (tag, provider) -> load(tag), null), DATA_NAME);
                 *///?} else {
-                return overworld.getDataStorage().computeIfAbsent(MapVariables::load, MapVariables::new, DATA_NAME);
+                return overworld.getDataStorage().computeIfAbsent(MapVariables::load, MapVariables::create, DATA_NAME);
                 //?}
             }
             return clientSide;

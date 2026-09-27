@@ -32,7 +32,7 @@ public final class Spawning {
     }
 
     public static boolean hazmat(ServerLevelAccessor world, MobSpawnType reason) {
-        return reason != MobSpawnType.CHUNK_GENERATION && always(world) && dimension(world) == Level.OVERWORLD;
+        return reason != MobSpawnType.CHUNK_GENERATION && always(world) && MutationcraftConfig.HAZMATS_SPAWN_NATURALLY.get() && dimension(world) == Level.OVERWORLD;
     }
 
     public static boolean hazmatFlamethrower(ServerLevelAccessor world, MobSpawnType reason) {
@@ -43,15 +43,34 @@ public final class Spawning {
         return hazmat(world, reason) && MutationcraftConfig.HELICOPTER_SPAWNS_NATURALLY.get();
     }
 
+    public static boolean enabled(double[] thresholds) {
+        if (thresholds == COMMON) {
+            return MutationcraftConfig.COMMON_MUTANTS_SPAWN.get();
+        } else if (thresholds == PARASITE) {
+            return MutationcraftConfig.PARASITES_SPAWN.get();
+        } else if (thresholds == ADVANCED) {
+            return MutationcraftConfig.ADVANCED_MUTANTS_SPAWN.get();
+        } else if (thresholds == ELITE) {
+            return MutationcraftConfig.ELITE_MUTANTS_SPAWN.get();
+        } else if (thresholds == BOSS) {
+            return MutationcraftConfig.BOSS_MUTANTS_SPAWN.get();
+        }
+        return true;
+    }
+
+    public static double threshold(double[] thresholds, int stage) {
+        return thresholds[Math.max(0, Math.min(stage, thresholds.length - 1))] * MutationcraftConfig.UNLOCK_TIME_MULTIPLIER.get();
+    }
+
     private static boolean staged(ServerLevelAccessor world, double[] thresholds, ResourceKey<Level> dimension) {
-        if (!always(world)) {
+        if (!always(world) || !enabled(thresholds)) {
             return false;
         }
         int stage = ModVariables.stage(world);
         if (stage < 0 || stage >= thresholds.length) {
             return false;
         }
-        return (dimension == null || dimension(world) == dimension) && ModVariables.time(world) > thresholds[stage];
+        return (dimension == null || dimension(world) == dimension) && ModVariables.time(world) > threshold(thresholds, stage);
     }
 
     private static ResourceKey<Level> dimension(LevelAccessor world) {

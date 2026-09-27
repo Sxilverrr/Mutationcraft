@@ -1,6 +1,7 @@
 package com.asestefan.mutationcraft.behavior;
 
 import com.asestefan.mutationcraft.ModUtil;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.init.ModBlocks;
 import com.asestefan.mutationcraft.init.ModParticles;
 import java.util.ArrayList;
@@ -39,11 +40,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public final class FlameSpray {
-    public static final double RANGE = 8.0;
+    private static final double BASE_RANGE = 8.0;
     public static final ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ModUtil.id("mutationcraft:flamethrower"));
     private static final double CONE_DEGREES = 24.0;
     private static final double CONE_COS = Math.cos(Math.toRadians(CONE_DEGREES));
-    private static final int BURN_SECONDS = 5;
     private static final int RING_RAYS = 8;
     private static final double[] RINGS = {0.5, 1.0};
     private static final double STEP = 0.5;
@@ -52,6 +52,10 @@ public final class FlameSpray {
     private static final double PLAYER_TIP_FORWARD = 1.6;
     private static final double PLAYER_TIP_SIDE = 0.37;
     private static final double PLAYER_TIP_UP = -0.1;
+
+    public static double range() {
+        return MutationcraftConfig.FLAMETHROWER_RANGE.get();
+    }
 
     public static Vec3 tip(LivingEntity shooter, Vec3 direction) {
         Vec3 side = direction.cross(new Vec3(0.0, 1.0, 0.0));
@@ -67,16 +71,17 @@ public final class FlameSpray {
 
     public static void particles(ServerLevel level, LivingEntity shooter, Vec3 origin, Vec3 direction) {
         RandomSource random = level.getRandom();
+        double scale = range() / BASE_RANGE;
         if (submerged(shooter)) {
             level.sendParticles(ParticleTypes.BUBBLE, origin.x, origin.y, origin.z, 8, 0.2, 0.2, 0.2, 0.08);
             return;
         }
         for (int i = 0; i < 12; i++) {
-            Vec3 velocity = spread(direction, random, CONE_DEGREES * 0.8).scale(0.6 + random.nextDouble() * 0.45);
+            Vec3 velocity = spread(direction, random, CONE_DEGREES * 0.8).scale((0.6 + random.nextDouble() * 0.45) * scale);
             level.sendParticles(ModParticles.FLAMETHROWER_FLAME.get(), origin.x, origin.y, origin.z, 0, velocity.x, velocity.y, velocity.z, 1.0);
         }
         for (int i = 0; i < 4; i++) {
-            Vec3 velocity = spread(direction, random, CONE_DEGREES).scale(0.2 + random.nextDouble() * 0.35);
+            Vec3 velocity = spread(direction, random, CONE_DEGREES).scale((0.2 + random.nextDouble() * 0.35) * scale);
             level.sendParticles(ParticleTypes.LARGE_SMOKE, origin.x, origin.y, origin.z, 0, velocity.x, velocity.y + 0.04, velocity.z, 1.0);
         }
         if (random.nextInt(3) == 0) {
@@ -96,15 +101,16 @@ public final class FlameSpray {
             return;
         }
         boolean griefing = shooter instanceof Player || level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        double range = range();
         Vec3[] rays = rays(direction);
         BlockHitResult[] hits = new BlockHitResult[rays.length];
         double[] reach = new double[rays.length];
         for (int i = 0; i < rays.length; i++) {
-            BlockHitResult hit = level.clip(new ClipContext(origin, origin.add(rays[i].scale(RANGE)), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, shooter));
+            BlockHitResult hit = level.clip(new ClipContext(origin, origin.add(rays[i].scale(range)), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, shooter));
             hits[i] = hit;
-            reach[i] = hit.getType() == HitResult.Type.MISS ? RANGE : origin.distanceTo(hit.getLocation());
+            reach[i] = hit.getType() == HitResult.Type.MISS ? range : origin.distanceTo(hit.getLocation());
         }
-        BURSTS.computeIfAbsent(level, key -> new ArrayList<>()).add(new Burst(shooter, origin, direction, rays, hits, reach, damage, igniteChance, griefing, stack.copy()));
+        BURSTS.computeIfAbsent(level, key -> new ArrayList<>()).add(new Burst(shooter, origin, direction, rays, hits, reach, range, damage, igniteChance, griefing, stack.copy()));
     }
 
     public static void tick(ServerLevel level) {
@@ -124,7 +130,7 @@ public final class FlameSpray {
     public static boolean allyInStream(LivingEntity shooter, Vec3 origin, Vec3 direction, double reach) {
         AABB box = new AABB(origin, origin.add(direction.scale(reach))).inflate(3.0);
         return !shooter.level().getEntitiesOfClass(LivingEntity.class, box,
-                entity -> entity != shooter && entity.isAlive() && shooter.isAlliedTo(entity) && entity.distanceTo(shooter) <= reach && inStream(entity, origin, direction)).isEmpty();
+                entity -> entity != shooter && entity.isAlive() && shooter.isAlliedTo(entity) && entity.distanceTo(shooter) <= reach && inStream(entity, origin, direction, range())).isEmpty();
     }
 
     private static final class Burst {
@@ -135,6 +141,7 @@ public final class FlameSpray {
         private final Vec3[] rays;
         private final BlockHitResult[] hits;
         private final double[] reach;
+        private final double range;
         private final float damage;
         private final double igniteChance;
         private final boolean griefing;
@@ -142,7 +149,7 @@ public final class FlameSpray {
         private final Set<LivingEntity> burned = new HashSet<>();
         private double travelled;
 
-        private Burst(LivingEntity shooter, Vec3 origin, Vec3 direction, Vec3[] rays, BlockHitResult[] hits, double[] reach, float damage, double igniteChance, boolean griefing, ItemStack stack) {
+        private Burst(LivingEntity shooter, Vec3 origin, Vec3 direction, Vec3[] rays, BlockHitResult[] hits, double[] reach, double range, float damage, double igniteChance, boolean griefing, ItemStack stack) {
             this.shooter = shooter;
             this.player = shooter instanceof Player p ? p : null;
             this.origin = origin;
@@ -150,6 +157,7 @@ public final class FlameSpray {
             this.rays = rays;
             this.hits = hits;
             this.reach = reach;
+            this.range = range;
             this.damage = damage;
             this.igniteChance = igniteChance;
             this.griefing = griefing;
@@ -158,23 +166,25 @@ public final class FlameSpray {
 
         private boolean advance(ServerLevel level) {
             double from = this.travelled;
-            this.travelled = Math.min(RANGE, from + FLAME_SPEED);
+            this.travelled = Math.min(this.range, from + FLAME_SPEED);
+            boolean foliage = this.player == null || MutationcraftConfig.FLAMETHROWER_BURNS_FOLIAGE.get();
+            boolean fires = this.player == null || MutationcraftConfig.FLAMETHROWER_LIGHTS_FIRES.get();
             for (int i = 0; this.griefing && i < this.rays.length; i++) {
                 double end = Math.min(this.travelled, this.reach[i]);
-                if (end > from) {
+                if (foliage && end > from) {
                     clearFoliage(level, this.shooter, this.player, this.origin, this.rays[i], from, end, this.stack);
                 }
                 BlockHitResult hit = this.hits[i];
                 if (hit.getType() == HitResult.Type.BLOCK && this.reach[i] > from && this.reach[i] <= this.travelled
                         && (this.player == null || this.player.mayUseItemAt(hit.getBlockPos(), hit.getDirection(), this.stack))) {
-                    if (!heat(level, hit.getBlockPos(), level.getBlockState(hit.getBlockPos()))
+                    if (!heat(level, hit.getBlockPos(), level.getBlockState(hit.getBlockPos())) && fires
                             && (this.igniteChance >= 1.0 || level.getRandom().nextDouble() < this.igniteChance)) {
                         ignite(level, this.player, hit, this.stack);
                     }
                 }
             }
             burnEntities(level, from);
-            return this.travelled >= RANGE;
+            return this.travelled >= this.range;
         }
 
         private void burnEntities(ServerLevel level, double from) {
@@ -187,15 +197,16 @@ public final class FlameSpray {
                     continue;
                 }
                 double along = target.getBoundingBox().getCenter().subtract(this.origin).dot(this.direction);
-                if (along > this.travelled + 0.5 || !inStream(target, this.origin, this.direction)) {
+                if (along > this.travelled + 0.5 || !inStream(target, this.origin, this.direction, this.range)) {
                     continue;
                 }
                 if (target instanceof Player targetPlayer && targetPlayer.getAbilities().invulnerable) {
                     continue;
                 }
                 this.burned.add(target);
-                if (!target.fireImmune()) {
-                    ModUtil.setOnFire(target, BURN_SECONDS);
+                int burnSeconds = MutationcraftConfig.FLAMETHROWER_BURN_SECONDS.getInt();
+                if (!target.fireImmune() && burnSeconds > 0) {
+                    ModUtil.setOnFire(target, burnSeconds);
                 }
                 if (this.player != null) {
                     target.setLastHurtByPlayer(this.player);
@@ -244,14 +255,14 @@ public final class FlameSpray {
         return direction.scale(Math.cos(tilt)).add(side.scale(Math.cos(angle) * sin)).add(up.scale(Math.sin(angle) * sin)).normalize();
     }
 
-    private static boolean inStream(LivingEntity target, Vec3 origin, Vec3 direction) {
+    private static boolean inStream(LivingEntity target, Vec3 origin, Vec3 direction, double range) {
         AABB bounds = target.getBoundingBox().inflate(0.3);
         Vec3 center = bounds.getCenter();
         Vec3 offset = center.subtract(origin);
-        if (offset.length() > RANGE + 1.0) {
+        if (offset.length() > range + 1.0) {
             return false;
         }
-        boolean aimed = bounds.clip(origin, origin.add(direction.scale(RANGE))).isPresent() || offset.normalize().dot(direction) >= CONE_COS;
+        boolean aimed = bounds.clip(origin, origin.add(direction.scale(range))).isPresent() || offset.normalize().dot(direction) >= CONE_COS;
         if (!aimed) {
             return false;
         }

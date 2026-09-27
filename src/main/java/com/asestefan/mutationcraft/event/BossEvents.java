@@ -6,6 +6,7 @@ import com.asestefan.mutationcraft.behavior.CorrosionQueenSpells;
 import com.asestefan.mutationcraft.behavior.ParasiticRamCharge;
 import com.asestefan.mutationcraft.behavior.ParasiticShooterSpots;
 import com.asestefan.mutationcraft.behavior.TheIntoxicatorBehavior;
+import com.asestefan.mutationcraft.config.MutationcraftConfig;
 import com.asestefan.mutationcraft.entity.CorrosionQueenEntity;
 import com.asestefan.mutationcraft.entity.HumanHerderEntity;
 import com.asestefan.mutationcraft.entity.ParasiticRamEntity;
@@ -97,7 +98,7 @@ public class BossEvents implements EventHandler {
     }
 
     private static void brood(ServerLevel level, LivingEntity entity) {
-        double r1 = level.getRandom().nextDouble();
+        double r1 = MutationcraftConfig.MUTANTS_SPAWN_PARASITES.get() ? level.getRandom().nextDouble() : 1.0;
         double r2 = level.getRandom().nextDouble();
         if (r1 <= 0.05) {
             if (r2 <= 0.05) {
@@ -121,7 +122,7 @@ public class BossEvents implements EventHandler {
     }
 
     private static void sicken(Entity killer) {
-        if (killer instanceof LivingEntity living) {
+        if (killer instanceof LivingEntity living && MutationcraftConfig.KILLING_MUTANTS_GIVES_SICKNESS.get()) {
             living.addEffect(new MobEffectInstance(ModMobEffects.MUTAGEN_SICKNESS.ref(), 2000, 0));
         }
     }
