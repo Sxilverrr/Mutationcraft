@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "mutationcraft:putrid_flesh"
+    },
+    "1": {
+      "item": "mutationcraft:putrid_brain"
+    },
+    "2": {
+      "item": "mutationcraft:putrid_flesh"
+    },
+    "3": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "4": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "5": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "6": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "7": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "8": {
+      "item": "mutationcraft:scrap_metal"
+    }
+  },
+  "result": {
+    "id": "mutationcraft:rusted_metal_boots",
+    "count": 1
+  }
+}

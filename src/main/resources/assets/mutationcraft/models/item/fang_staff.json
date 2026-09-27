@@ -1,0 +1,8 @@
+{
+  "parent": "mutationcraft:item/custom/fang_staff",
+  "textures": {
+    "staff_goblin_witch_staff": "mutationcraft:item/fang_staff_model",
+    "staff_goblin_witch_staff_supplement": "mutationcraft:item/fang_staff_model_gem",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

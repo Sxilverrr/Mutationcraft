@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "mutationcraft:putrid_brain"
+    },
+    "1": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "2": {
+      "item": "mutationcraft:putrid_heart"
+    },
+    "3": {
+      "item": "minecraft:iron_ingot"
+    },
+    "4": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "5": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "6": {
+      "item": "minecraft:stick"
+    },
+    "7": {
+      "item": "minecraft:iron_ingot"
+    },
+    "8": {
+      "item": "mutationcraft:putrid_flesh"
+    }
+  },
+  "result": {
+    "id": "mutationcraft:infected_nordic_axe",
+    "count": 1
+  }
+}

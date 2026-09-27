@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "mutationcraft:block/putrid_block",
+    "up": "mutationcraft:block/putrid_block",
+    "north": "mutationcraft:block/putrid_block",
+    "east": "mutationcraft:block/putrid_block",
+    "south": "mutationcraft:block/putrid_block",
+    "west": "mutationcraft:block/putrid_block",
+    "particle": "mutationcraft:block/putrid_block"
+  },
+  "render_type": "solid"
+}

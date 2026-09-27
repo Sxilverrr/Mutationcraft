@@ -1,0 +1,95 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"static pose": {
+			"loop": true,
+			"bones": {
+				"Tentacle": {
+					"scale": {
+						"vector": [1.5, 1.6, 1.5]
+					}
+				}
+			}
+		},
+		"idle": {
+			"loop": true,
+			"bones": {
+				"1": {
+					"rotation": {
+						"vector": ["-164.8919-math.cos(-50+query.anim_time*180)*9", -8.74581, "81.4139+math.sin(50+query.anim_time*100)*5"]
+					},
+					"position": {
+						"vector": [-1, 1, 0]
+					}
+				},
+				"2": {
+					"rotation": {
+						"vector": ["-48.9189-math.cos(-80+query.anim_time*150)*5", 6.01129, "3.522+math.sin(60+query.anim_time*120)*6"]
+					}
+				},
+				"3": {
+					"rotation": {
+						"vector": ["82.5111-math.cos(-80+query.anim_time*150)*5", 65.56186, "-121.6712+math.sin(60+query.anim_time*120)*6"]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"4": {
+					"rotation": {
+						"vector": ["-112.5693-math.cos(-50+query.anim_time*180)*9", -33.40813, "-56.9365+math.sin(50+query.anim_time*100)*5"]
+					}
+				},
+				"5": {
+					"rotation": {
+						"vector": ["-48.9189-math.cos(-80+query.anim_time*150)*5", 6.01129, "3.522+math.sin(60+query.anim_time*120)*6"]
+					}
+				},
+				"6": {
+					"rotation": {
+						"vector": ["-184.1241-math.cos(-50+query.anim_time*180)*9", 45.65007, "-166.0719+math.sin(50+query.anim_time*100)*5"]
+					}
+				},
+				"bone12": {
+					"rotation": {
+						"vector": [0, 35, 0]
+					}
+				},
+				"Jaw1": {
+					"rotation": {
+						"vector": [0, 0, "8.9281+math.sin(110+query.anim_time*100)*20"]
+					}
+				},
+				"Jaw2": {
+					"rotation": {
+						"vector": ["8.9281+math.sin(110+query.anim_time*100)*20", 0, 0]
+					}
+				},
+				"Jaw3": {
+					"rotation": {
+						"vector": [0, 0, "-8.9281+math.sin(110+query.anim_time*100)*-20"]
+					}
+				},
+				"Jaw4": {
+					"rotation": {
+						"vector": ["-8.9281+math.sin(110+query.anim_time*100)*-20", 0, 0]
+					}
+				},
+				"Tentacle": {
+					"position": {
+						"vector": [0, 0, 1]
+					},
+					"scale": {
+						"vector": [1.5, 1.6, 1.5]
+					}
+				},
+				"bone13": {
+					"rotation": {
+						"vector": [0, 17.5, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

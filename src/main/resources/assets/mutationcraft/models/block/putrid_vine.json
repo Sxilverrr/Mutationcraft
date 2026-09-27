@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "mutationcraft:block/putrid_vine",
+    "particle": "mutationcraft:block/putrid_vine"
+  },
+  "render_type": "cutout"
+}

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "mutationcraft:infected_rapier",
+    "mutationcraft:infected_battle_axe",
+    "mutationcraft:infected_nordic_axe",
+    "mutationcraft:infected_pole_axe",
+    "mutationcraft:infected_halberd",
+    "mutationcraft:infected_cavalry_sword",
+    "mutationcraft:infected_flanged_mace"
+  ]
+}

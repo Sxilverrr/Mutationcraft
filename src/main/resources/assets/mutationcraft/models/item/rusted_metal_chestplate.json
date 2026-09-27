@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mutationcraft:item/rusted_metal_chestplate"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mutationcraft:item/parasitic_shooter_spawn_egg"
+  }
+}

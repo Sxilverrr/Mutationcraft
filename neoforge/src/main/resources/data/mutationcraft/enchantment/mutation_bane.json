@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.mutationcraft.mutation_bane"
+  },
+  "exclusive_set": "minecraft:smite",
+  "supported_items": "#minecraft:enchantable/sword",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": {
+    "base": 11,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 16,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ]
+}

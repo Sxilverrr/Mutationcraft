@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": {
+    "type": "neoforge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:hazmat_medic",
+    "weight": 18,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

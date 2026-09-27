@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_nordic_axe",
+  "textures": {
+    "2": "mutationcraft:item/infected_nordic_axe_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

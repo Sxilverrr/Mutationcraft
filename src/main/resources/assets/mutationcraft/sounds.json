@@ -1,0 +1,316 @@
+{
+  "entity.assimilated_bear.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_bear/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_bear.ambient"
+  },
+  "entity.assimilated_bear.death": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_bear/death"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_bear.death"
+  },
+  "entity.assimilated_cow.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_cow/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_cow.ambient"
+  },
+  "entity.assimilated_creeper.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_creeper/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_creeper.ambient"
+  },
+  "entity.assimilated_donkey.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_donkey/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_donkey.ambient"
+  },
+  "entity.assimilated_enderman.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_enderman/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_enderman.ambient"
+  },
+  "entity.assimilated_enderman.death": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_enderman/death"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_enderman.death"
+  },
+  "entity.assimilated_enderman.hurt": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_enderman/hurt"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_enderman.hurt"
+  },
+  "entity.assimilated_enderman.teleport": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_enderman/teleport"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_enderman.teleport"
+  },
+  "entity.assimilated_enderman.teleport_far": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_enderman/teleport_far"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_enderman.teleport_far"
+  },
+  "entity.assimilated_evoker.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_evoker/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_evoker.ambient"
+  },
+  "entity.assimilated_evoker.summon_fangs": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_evoker/summon_fangs"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_evoker.summon_fangs"
+  },
+  "entity.assimilated_evoker.summon_vex": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_evoker/summon_vex"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_evoker.summon_vex"
+  },
+  "entity.assimilated_fox.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_fox/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_fox.ambient"
+  },
+  "entity.assimilated_horse.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_horse/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_horse.ambient"
+  },
+  "entity.assimilated_pig.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_pig/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_pig.ambient"
+  },
+  "entity.assimilated_sheep.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_sheep/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_sheep.ambient"
+  },
+  "entity.assimilated_spider.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_spider/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_spider.ambient"
+  },
+  "entity.assimilated_witch.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_witch/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_witch.ambient"
+  },
+  "entity.assimilated_wolf.ambient": {
+    "sounds": [
+      "mutationcraft:entity/assimilated_wolf/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.assimilated_wolf.ambient"
+  },
+  "entity.carnivorae.ambient": {
+    "sounds": [
+      "mutationcraft:entity/carnivorae/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.carnivorae.ambient"
+  },
+  "entity.corrosion_queen.ambient": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.ambient"
+  },
+  "entity.corrosion_queen.death": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/death"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.death"
+  },
+  "entity.corrosion_queen.hurt": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/hurt"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.hurt"
+  },
+  "entity.corrosion_queen.spell": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/spell"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.spell"
+  },
+  "entity.corrosion_queen.summon_blood_spike": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/summon_blood_spike"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.summon_blood_spike"
+  },
+  "entity.corrosion_queen.summon_poisoned_spikes": {
+    "sounds": [
+      "mutationcraft:entity/corrosion_queen/summon_poisoned_spikes"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.corrosion_queen.summon_poisoned_spikes"
+  },
+  "entity.hazmat_flamethrower.explode": {
+    "sounds": [
+      "mutationcraft:entity/hazmat_flamethrower/explode"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.hazmat_flamethrower.explode"
+  },
+  "entity.hazmat_helicopter.ambient": {
+    "sounds": [
+      "mutationcraft:entity/hazmat_helicopter/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.hazmat_helicopter.ambient"
+  },
+  "entity.hook.ambient": {
+    "sounds": [
+      "mutationcraft:entity/hook/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.hook.ambient"
+  },
+  "entity.human_herder.ambient": {
+    "sounds": [
+      "mutationcraft:entity/human_herder/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.human_herder.ambient"
+  },
+  "entity.human_herder.step": {
+    "sounds": [
+      "mutationcraft:entity/human_herder/step"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.human_herder.step"
+  },
+  "entity.human_stage.ambient": {
+    "sounds": [
+      "mutationcraft:entity/human_stage/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.human_stage.ambient"
+  },
+  "entity.mutant.animal_death": {
+    "sounds": [
+      "mutationcraft:entity/mutant/animal_death"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.animal_death"
+  },
+  "entity.mutant.bite": {
+    "sounds": [
+      "mutationcraft:entity/mutant/bite"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.bite"
+  },
+  "entity.mutant.death": {
+    "sounds": [
+      "mutationcraft:entity/mutant/death"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.death"
+  },
+  "entity.mutant.human_ambient": {
+    "sounds": [
+      "mutationcraft:entity/mutant/human_ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.human_ambient"
+  },
+  "entity.mutant.hurt": {
+    "sounds": [
+      "mutationcraft:entity/mutant/hurt"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.hurt"
+  },
+  "entity.mutant.transform": {
+    "sounds": [
+      "mutationcraft:entity/mutant/transform"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.mutant.transform"
+  },
+  "entity.necroptor.ambient": {
+    "sounds": [
+      "mutationcraft:entity/necroptor/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.necroptor.ambient"
+  },
+  "entity.parasitic_shooter.ambient": {
+    "sounds": [
+      "mutationcraft:entity/parasitic_shooter/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.parasitic_shooter.ambient"
+  },
+  "entity.reductor.ambient": {
+    "sounds": [
+      "mutationcraft:entity/reductor/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.reductor.ambient"
+  },
+  "entity.resenter.ambient": {
+    "sounds": [
+      "mutationcraft:entity/resenter/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.resenter.ambient"
+  },
+  "entity.the_intoxicator.ambient": {
+    "sounds": [
+      "mutationcraft:entity/the_intoxicator/ambient"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.the_intoxicator.ambient"
+  },
+  "entity.the_intoxicator.scream": {
+    "sounds": [
+      "mutationcraft:entity/the_intoxicator/scream"
+    ],
+    "subtitle": "subtitles.mutationcraft.entity.the_intoxicator.scream"
+  },
+  "event.village.alarm": {
+    "sounds": [
+      "mutationcraft:event/village/alarm"
+    ],
+    "subtitle": "subtitles.mutationcraft.event.village.alarm"
+  },
+  "event.village.ambulance": {
+    "sounds": [
+      "mutationcraft:event/village/ambulance"
+    ],
+    "subtitle": "subtitles.mutationcraft.event.village.ambulance"
+  },
+  "item.flamethrower.bubble": {
+    "sounds": [
+      "mutationcraft:item/flamethrower/bubble"
+    ],
+    "subtitle": "subtitles.mutationcraft.item.flamethrower.bubble"
+  },
+  "item.flamethrower.burn": {
+    "sounds": [
+      "mutationcraft:item/flamethrower/burn"
+    ],
+    "subtitle": "subtitles.mutationcraft.item.flamethrower.burn"
+  },
+  "item.flamethrower.overheat": {
+    "sounds": [
+      {
+        "name": "mutationcraft:item/flamethrower/overheat",
+        "stream": false,
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.mutationcraft.item.flamethrower.overheat"
+  },
+  "item.flamethrower.use": {
+    "sounds": [
+      {
+        "name": "mutationcraft:item/flamethrower/use",
+        "stream": false,
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.mutationcraft.item.flamethrower.use"
+  }
+}

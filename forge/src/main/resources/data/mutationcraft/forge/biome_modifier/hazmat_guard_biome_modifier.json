@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:hazmat_guard",
+    "weight": 23,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

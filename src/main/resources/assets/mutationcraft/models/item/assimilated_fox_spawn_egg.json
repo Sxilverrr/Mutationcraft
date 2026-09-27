@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mutationcraft:item/assimilated_fox_spawn_egg"
+  }
+}

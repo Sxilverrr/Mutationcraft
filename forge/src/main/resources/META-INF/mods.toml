@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "${forge_range}"
+license = "MIT"
+issueTrackerURL = "https://www.curseforge.com/minecraft/mc-mods/mutationcraft"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${name}"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/mutationcraft"
+authors = "ASEStefan, Sxilverr"
+credits = "Artists: songsofsorrow & Jordaan"
+description = "Adds new mutant creatures into the game."
+logoFile = "logo.png"
+
+[[dependencies.${id}]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "${forge_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${id}]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "${minecraft}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${id}]]
+    modId = "geckolib"
+    mandatory = true
+    versionRange = "${geckolib_range}"
+    ordering = "AFTER"
+    side = "BOTH"

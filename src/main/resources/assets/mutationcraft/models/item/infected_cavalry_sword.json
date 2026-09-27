@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_cavalry_sword",
+  "textures": {
+    "1": "mutationcraft:item/infected_cavalry_sword_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

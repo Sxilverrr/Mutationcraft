@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": {
+    "type": "neoforge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:assimilated_donkey",
+    "weight": 19,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

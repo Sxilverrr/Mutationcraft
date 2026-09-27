@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": {
+    "type": "neoforge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:human_stage_2",
+    "weight": 12,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

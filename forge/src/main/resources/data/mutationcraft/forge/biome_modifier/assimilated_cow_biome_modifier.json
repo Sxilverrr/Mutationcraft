@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:assimilated_cow",
+    "weight": 21,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

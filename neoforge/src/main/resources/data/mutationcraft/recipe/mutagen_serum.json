@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " 1 ",
+    "345",
+    " 7 "
+  ],
+  "key": {
+    "1": {
+      "item": "mutationcraft:necroptor_membrane"
+    },
+    "3": {
+      "item": "mutationcraft:necroptor_membrane"
+    },
+    "4": {
+      "item": "minecraft:glass_bottle"
+    },
+    "5": {
+      "item": "mutationcraft:necroptor_membrane"
+    },
+    "7": {
+      "item": "mutationcraft:necroptor_membrane"
+    }
+  },
+  "result": {
+    "id": "mutationcraft:mutagen_serum",
+    "count": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mutationcraft:item/light_hook_spawn_egg"
+  }
+}

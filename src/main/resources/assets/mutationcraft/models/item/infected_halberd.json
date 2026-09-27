@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_halberd",
+  "textures": {
+    "2": "mutationcraft:item/infected_halberd_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

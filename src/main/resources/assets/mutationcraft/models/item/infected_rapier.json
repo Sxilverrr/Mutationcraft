@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_rapier",
+  "textures": {
+    "0": "mutationcraft:item/infected_rapier_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "1": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "2": {
+      "item": "minecraft:iron_ingot"
+    },
+    "3": {
+      "item": "mutationcraft:putrid_flesh"
+    },
+    "4": {
+      "item": "minecraft:iron_ingot"
+    },
+    "5": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "6": {
+      "item": "minecraft:stick"
+    },
+    "7": {
+      "item": "mutationcraft:putrid_heart"
+    },
+    "8": {
+      "item": "mutationcraft:putrid_brain"
+    }
+  },
+  "result": {
+    "id": "mutationcraft:infected_flanged_mace",
+    "count": 1
+  }
+}

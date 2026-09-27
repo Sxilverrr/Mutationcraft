@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "1": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "2": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "3": {
+      "item": "mutationcraft:scrap_metal"
+    },
+    "4": {
+      "item": "minecraft:stick"
+    },
+    "5": {
+      "item": "mutationcraft:putrid_brain"
+    },
+    "6": {
+      "item": "minecraft:stick"
+    },
+    "7": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "8": {
+      "item": "mutationcraft:putrid_heart"
+    }
+  },
+  "result": {
+    "item": "mutationcraft:infected_halberd",
+    "count": 1
+  }
+}

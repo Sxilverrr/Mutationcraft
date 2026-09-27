@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "mutationcraft:hazmat_helicopter",
+    "weight": 14,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

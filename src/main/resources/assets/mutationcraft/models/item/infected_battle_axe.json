@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_battle_axe",
+  "textures": {
+    "0": "mutationcraft:item/infected_battle_axe_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

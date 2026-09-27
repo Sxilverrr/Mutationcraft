@@ -1,0 +1,7 @@
+{
+  "parent": "mutationcraft:item/custom/infected_flanged_mace",
+  "textures": {
+    "2": "mutationcraft:item/infected_flanged_mace_model",
+    "particle": "mutationcraft:item/infected_weapon_particle"
+  }
+}

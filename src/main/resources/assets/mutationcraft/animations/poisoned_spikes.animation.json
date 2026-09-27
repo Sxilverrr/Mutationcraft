@@ -1,0 +1,45 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"static pose": {
+			"loop": true,
+			"animation_length": 4.08333,
+			"bones": {
+				"bone": {
+					"scale": {
+						"vector": [1.1, 0.8, 1]
+					}
+				},
+				"bone2": {
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 0.7, 0.8]
+					}
+				},
+				"bone3": {
+					"scale": {
+						"vector": [1, 0.8, 0.9]
+					}
+				},
+				"bone4": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 0.8, 1.1]
+						},
+						"4.0833": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"bone5": {
+					"scale": {
+						"vector": [1, 0.7, 1]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
